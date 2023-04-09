@@ -1,11 +1,21 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development",
   entry: {
-    bundle: "./src/index.js",
+    index: "./src/index.js",
+    login: "./src/login.js",
+  },
+  devServer: {
+    static: {
+      directory: path.resolve(__dirname, "../dist"),
+    },
+    compress: true,
+    port: 8000,
+    hot: true,
   },
   output: {
     filename: "js/[name].js",
@@ -37,14 +47,24 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "./src/index.html",
+      chunks: ["index"],
     }),
     new HtmlWebpackPlugin({
       filename: "login.html",
       template: "./src/login.html",
+      chunks: ["login"],
     }),
     new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
+      $: "jquery",
+      jQuery: "jquery",
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "./src/img"),
+          to: path.resolve(__dirname, "./dist/img"),
+        },
+      ],
     }),
   ],
 };
