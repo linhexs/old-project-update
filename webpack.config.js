@@ -2,6 +2,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
   mode: "development",
@@ -25,7 +28,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [MiniCssExtractPlugin.loader, { loader: "css-loader" }],
       },
       {
         test: /\.(png|jpg|svg|jpeg|gif)$/i,
@@ -43,7 +46,18 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    minimize: true, //代码压缩
+    minimizer: [
+      new UglifyJsPlugin(),
+      new CssMinimizerPlugin(),
+    ],
+  },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: "css/[name].css",
+      chunkFilename: "css/[name].chunk.css",
+    }),
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "./src/index.html",
