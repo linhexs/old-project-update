@@ -52,6 +52,24 @@ module.exports = {
       new UglifyJsPlugin(),
       new CssMinimizerPlugin(),
     ],
+    splitChunks: {
+      minSize: 5 * 1024,
+      chunks: 'all',
+      name: 'common',
+      automaticNameDelimiter: '_',
+      cacheGroups: {
+        jquery: {
+          name: 'jquery',
+          chunks: 'all',
+          test: /jquery\.js/,
+        },
+        'lodash': {
+          name: 'lodash',
+          chunks: 'all',
+          test: /lodash/,
+        }
+      },
+    },
   },
   plugins: [
     new MiniCssExtractPlugin({
