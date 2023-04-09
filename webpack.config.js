@@ -2,9 +2,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: "development",
@@ -44,30 +45,34 @@ module.exports = {
           filename: "images/[name].[hash:6][ext]",
         },
       },
+      {
+        test: /\.ejs/,
+        loader: "ejs-loader",
+        options: {
+          esModule: false,
+        },
+      },
     ],
   },
   optimization: {
     minimize: true, //代码压缩
-    minimizer: [
-      new UglifyJsPlugin(),
-      new CssMinimizerPlugin(),
-    ],
+    minimizer: [new UglifyJsPlugin(), new CssMinimizerPlugin()],
     splitChunks: {
       minSize: 5 * 1024,
-      chunks: 'all',
-      name: 'common',
-      automaticNameDelimiter: '_',
+      chunks: "all",
+      name: "common",
+      automaticNameDelimiter: "_",
       cacheGroups: {
         jquery: {
-          name: 'jquery',
-          chunks: 'all',
+          name: "jquery",
+          chunks: "all",
           test: /jquery\.js/,
         },
-        'lodash': {
-          name: 'lodash',
-          chunks: 'all',
+        lodash: {
+          name: "lodash",
+          chunks: "all",
           test: /lodash/,
-        }
+        },
       },
     },
   },
@@ -98,5 +103,6 @@ module.exports = {
         },
       ],
     }),
+    new CleanWebpackPlugin(),
   ],
 };

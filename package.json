@@ -19,6 +19,7 @@
     "webpack-dev-server": "^4.13.2"
   },
   "dependencies": {
+    "ejs": "^3.1.9",
     "flexslider": "^2.7.2",
     "jquery": "^3.6.4"
   }
